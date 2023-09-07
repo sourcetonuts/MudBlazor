@@ -169,7 +169,6 @@ namespace MudBlazor
         /// Current Page two-way bindable parameter
         /// </summary>
         [Parameter] public EventCallback<int> CurrentPageChanged { get; set; }
-        
 
         /// <summary>
         /// The page index of the currently displayed page (Zero based). Usually called by MudTablePager.

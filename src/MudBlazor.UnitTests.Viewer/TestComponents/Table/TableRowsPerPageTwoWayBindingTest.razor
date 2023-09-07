@@ -10,6 +10,7 @@
               Dense="true" Hover="true"
               FixedHeader="true"
               SortLabel="Sort By"
+              @bind-CurrentPage=@CurrentPage
               @bind-RowsPerPage=@RowsPerPage>
         <RowTemplate>
             <MudTd DataLabel="Text">@context.Text</MudTd>

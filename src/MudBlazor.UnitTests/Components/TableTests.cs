@@ -1921,6 +1921,35 @@ namespace MudBlazor.UnitTests.Components
             comp.WaitForAssertion(() => rowsPerPage.Should().Be(newRowsPerPage, "ValueChanged EventCallback fired correctly"));
         }
 
+
+        /// <summary>
+        /// Tests checks that RowsPerPage Parameter is two-way bindable
+        /// </summary>
+        [Test]
+        public async Task CurrentPageParameterTwoWayBinding()
+        {
+            int currentPage = 1;
+            int newCurrentPage = 2;
+            var comp = Context.RenderComponent<TableRowsPerPageTwoWayBindingTest>(parameters => parameters
+                .Add(p => p.RowsPerPage, currentPage)
+                .Add(p => p.CurrentPageChanged, (s) =>
+                {
+                    currentPage = int.Parse(s.ToString());
+                })
+            );
+            //Check the component rendered correctly with the initial CurrentPage
+            var t = comp.Find("input.mud-select-input").GetAttribute("Value");
+            int.Parse(t).Should().Be(currentPage, "The component rendered correctly");
+            //open the menu
+            var menuItem = comp.Find("div.mud-input-control");
+            menuItem.Click();
+
+            //Now select the 2 and check it
+            var items = comp.FindAll("div.mud-list-item").ToArray();
+            items[1].Click();
+            comp.WaitForAssertion(() => currentPage.Should().Be(newCurrentPage, "ValueChanged EventCallback fired correctly"));
+        }
+
         /// <summary>
         /// Tests that clicking a row in a non-editable table does not set IsEditing to true and stop the table from updating.
         /// </summary>

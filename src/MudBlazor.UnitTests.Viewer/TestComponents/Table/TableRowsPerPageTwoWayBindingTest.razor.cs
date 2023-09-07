@@ -17,6 +17,7 @@ namespace MudBlazor.UnitTests.TestComponents
         public static string __description__ = "Test Two-Way Binding of RowsPerPage Parameter.";
 
         private int _RowsPerPage = 3;
+        private int _CurrentPage = 1;
 
         [Parameter]
         public int RowsPerPage
@@ -31,8 +32,25 @@ namespace MudBlazor.UnitTests.TestComponents
             }
         }
 
+
+        [Parameter]
+        public int CurrentPage
+        {
+            get => _CurrentPage;
+            set
+            {
+                if (_CurrentPage == value)
+                    return;
+                _CurrentPage = value;
+                CurrentPageChanged.InvokeAsync(value);
+            }
+        }
+
         [Parameter]
         public EventCallback<int> RowsPerPageChanged { get; set; }
+
+        [Parameter]
+        public EventCallback<int> CurrentPageChanged { get; set; }
 
 
         private ViewModel viewModel = new ViewModel();
