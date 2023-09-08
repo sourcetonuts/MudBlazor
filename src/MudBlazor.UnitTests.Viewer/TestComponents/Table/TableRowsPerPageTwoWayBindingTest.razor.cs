@@ -2,10 +2,8 @@
 // MudBlazor licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
@@ -51,7 +49,6 @@ namespace MudBlazor.UnitTests.TestComponents
 
         [Parameter]
         public EventCallback<int> CurrentPageChanged { get; set; }
-
 
         private ViewModel viewModel = new ViewModel();
 

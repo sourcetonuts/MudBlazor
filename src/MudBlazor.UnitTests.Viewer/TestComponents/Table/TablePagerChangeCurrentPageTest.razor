@@ -1,0 +1,14 @@
+﻿@using System.ComponentModel
+@using System.Runtime.CompilerServices
+@namespace MudBlazor.UnitTests.TestComponents
+
+<MudTable Items="states" CurrentPage="@pagenum" RowsPerPage="10">
+    <RowTemplate>
+        <MudTd>@context</MudTd>
+    </RowTemplate> 
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+<MudButton Disabled="false" OnClick="@(() => TogglePage())" Variant="Variant.Outlined">Toggle Page</MudButton>
