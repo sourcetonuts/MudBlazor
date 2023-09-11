@@ -1769,7 +1769,8 @@ namespace MudBlazor.UnitTests.Components
             tr.Length.Should().Be(39); // 01 Table header + 14 Group Headers + 14 Group Footers + 10 Entries
 
             // Navigating to page 2
-            table.NavigateTo(1);
+            comp.WaitForAssertion(() => table.NavigateTo(1));
+            comp.WaitForAssertion(() => table.CurrentPage.Should().Be(1));
 
             // Page 02:
             // [00] Aston Martin
