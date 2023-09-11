@@ -1769,7 +1769,8 @@ namespace MudBlazor.UnitTests.Components
             tr.Length.Should().Be(39); // 01 Table header + 14 Group Headers + 14 Group Footers + 10 Entries
 
             // Navigating to page 2
-            table.NavigateTo(1);
+            comp.WaitForAssertion(() => table.NavigateTo(1));
+            comp.WaitForAssertion(() => table.CurrentPage.Should().Be(1));
 
             // Page 02:
             // [00] Aston Martin
@@ -1922,6 +1923,35 @@ namespace MudBlazor.UnitTests.Components
         }
 
         /// <summary>
+        /// Tests checks that RowsPerPage Parameter is two-way bindable
+        /// </summary>
+        [Test]
+        public async Task CurrentPageParameterTwoWayBinding()
+        {
+            int currentPage = 0;
+
+            var testComponent = Context.RenderComponent<TableRowsPerPageTwoWayBindingTest>(parameters => parameters
+                .Add(p => p.CurrentPage, 0)
+                .Add(p => p.RowsPerPage, 10)
+                .Add(p => p.CurrentPageChanged, (s) =>
+                {
+                    currentPage = int.Parse(s.ToString());
+                })
+            );
+
+            var table = testComponent.Instance;
+            testComponent.WaitForAssertion(() => table.CurrentPage.Should().Be(0));
+
+            await testComponent.InvokeAsync(() => table.CurrentPage = 1);
+            testComponent.WaitForAssertion(() => table.CurrentPage.Should().Be(1));
+            currentPage.Should().Be(1);
+
+            await testComponent.InvokeAsync(() => table.CurrentPage = 0);
+            testComponent.WaitForAssertion(() => table.CurrentPage.Should().Be(0));
+            currentPage.Should().Be(0);
+        }
+
+        /// <summary>
         /// Tests that clicking a row in a non-editable table does not set IsEditing to true and stop the table from updating.
         /// </summary>
         [Test]
@@ -1964,6 +1994,21 @@ namespace MudBlazor.UnitTests.Components
             //Toggle the rows per page value from 10 back to  to 35
             buttonComponent.Find("button").Click();
             testComponent.WaitForAssertion(() => table.RowsPerPage.Should().Be(35));
+        }
+
+        [Test]
+        public async Task CurrentPageChangeValueFromCode()
+        {
+            var testComponent = Context.RenderComponent<TablePagerChangeCurrentPageTest>();
+            var table = testComponent.FindComponent<MudTable<string>>().Instance;
+            var buttonComponent = testComponent.FindComponent<MudButton>();
+            testComponent.WaitForAssertion(() => table.CurrentPage.Should().Be(0));
+            //Toggle the current page value from 0 to 1
+            buttonComponent.Find("button").Click();
+            testComponent.WaitForAssertion(() => table.CurrentPage.Should().Be(1));
+            //Toggle the current page value from 1 back to 0
+            buttonComponent.Find("button").Click();
+            testComponent.WaitForAssertion(() => table.CurrentPage.Should().Be(0));
         }
 
         /// <summary>

@@ -166,6 +166,11 @@ namespace MudBlazor
         [Parameter] public EventCallback<int> RowsPerPageChanged { get; set; }
 
         /// <summary>
+        /// Current Page two-way bindable parameter
+        /// </summary>
+        [Parameter] public EventCallback<int> CurrentPageChanged { get; set; }
+
+        /// <summary>
         /// The page index of the currently displayed page (Zero based). Usually called by MudTablePager.
         /// Note: requires a MudTablePager in PagerContent.
         /// </summary>
@@ -176,12 +181,8 @@ namespace MudBlazor
             get => _currentPage;
             set
             {
-                if (_currentPage == value)
-                    return;
-                _currentPage = value;
-                InvokeAsync(StateHasChanged);
-                if (_isFirstRendered)
-                    InvokeServerLoadFunc();
+                if (_currentPage != value)
+                    SetCurrentPage(value);
             }
         }
 
@@ -499,6 +500,17 @@ namespace MudBlazor
         public void NavigateTo(int pageIndex)
         {
             CurrentPage = Math.Min(Math.Max(0, pageIndex), NumPages - 1);
+        }
+
+        public void SetCurrentPage(int page)
+        {
+            if (_currentPage == page)
+                return;
+            _currentPage = page;
+            StateHasChanged();
+            CurrentPageChanged.InvokeAsync(_currentPage);
+            if (_isFirstRendered)
+                InvokeServerLoadFunc();
         }
 
         public void SetRowsPerPage(int size)

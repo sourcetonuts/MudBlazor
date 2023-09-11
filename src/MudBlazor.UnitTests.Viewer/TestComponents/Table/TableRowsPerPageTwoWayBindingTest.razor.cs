@@ -2,10 +2,8 @@
 // MudBlazor licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
@@ -17,6 +15,7 @@ namespace MudBlazor.UnitTests.TestComponents
         public static string __description__ = "Test Two-Way Binding of RowsPerPage Parameter.";
 
         private int _RowsPerPage = 3;
+        private int _CurrentPage = 1;
 
         [Parameter]
         public int RowsPerPage
@@ -31,9 +30,25 @@ namespace MudBlazor.UnitTests.TestComponents
             }
         }
 
+
+        [Parameter]
+        public int CurrentPage
+        {
+            get => _CurrentPage;
+            set
+            {
+                if (_CurrentPage == value)
+                    return;
+                _CurrentPage = value;
+                CurrentPageChanged.InvokeAsync(value);
+            }
+        }
+
         [Parameter]
         public EventCallback<int> RowsPerPageChanged { get; set; }
 
+        [Parameter]
+        public EventCallback<int> CurrentPageChanged { get; set; }
 
         private ViewModel viewModel = new ViewModel();
 
